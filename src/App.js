@@ -11,7 +11,7 @@ function App() {
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/read')
+    fetch('https://save-data-server.vercel.app/read')
       .then(res => res.json())
       .then(data => setSaveDatas(data[0]))
   }, []);
@@ -20,7 +20,7 @@ function App() {
   const { data: postDatas = [], isLoading, refetch } = useQuery({
     queryKey: ['postDatas'],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/saveData`)
+      const res = await fetch(`https://save-data-server.vercel.app/saveData`)
       const data = await res.json();
       return data
     }
@@ -38,7 +38,7 @@ function App() {
       sector
     };
 
-    fetch('http://localhost:5000/save', {
+    fetch('https://save-data-server.vercel.app/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(saveInfo)
@@ -54,7 +54,7 @@ function App() {
   }
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/delete/${id}`, {
+    fetch(`https://save-data-server.vercel.app/delete/${id}`, {
       method: 'DELETE'
     })
       .then(res => res.json())
@@ -81,7 +81,7 @@ function App() {
     };
     console.log(saveInfo);
 
-    fetch(`http://localhost:5000/update/${id}`, {
+    fetch(`https://save-data-server.vercel.app/update/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(saveInfo)
