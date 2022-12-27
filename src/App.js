@@ -3,13 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import { computeHeadingLevel } from '@testing-library/react';
 
 function App() {
-  // const [postDatas, setPostDatas] = useState([])
   const [saveDatas, setSaveDatas] = useState([]);
   const { sectors } = saveDatas;
-  const [singledata, setSingledata] = useState([])
+  const [singledata, setSingledata] = useState([]);
 
 
   useEffect(() => {
@@ -27,23 +25,6 @@ function App() {
       return data
     }
   });
-
-  /*   useEffect(() => {
-      fetch('http://localhost:5000/saveData/63aa7861365d25db3142e3cc')
-        .then(res => res.json())
-        .then(data => console.log(data))
-    }, []); */
-
-
-  const displayData = (id) => {
-    fetch(`http://localhost:5000/saveData/${id}`)
-      .then(res => res.json())
-      .then(data => setSingledata(data)) 
-  }
-
-
-
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -87,10 +68,9 @@ function App() {
   };
 
 
-  const handleUpdate = (id, event) => {
+  const handleUpdate = (event, id) => {
     event.preventDefault();
 
-    console.log(id);
     const form = event.target
     const name = form.name.value;
     const sector = form.sector.value;
@@ -101,17 +81,15 @@ function App() {
     };
     console.log(saveInfo);
 
-    fetch(`http://localhost:5000/update`, {
+    fetch(`http://localhost:5000/update/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(saveInfo)
     })
       .then(res => res.json())
       .then(data => {
-
         console.log(data)
       })
-
   }
 
   return (
@@ -120,9 +98,7 @@ function App() {
         <h1 className='text-2xl text-center py-5 font-bold text-black'>Please enter your name and pick the Sectors you are currently involved in.</h1>
       </div>
 
-
       {/* here is the save data information. */}
-
 
       <div className='grid my-10 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1'>
 
@@ -155,7 +131,6 @@ function App() {
             <h1 className='text-center text-2xl my-2'>Your save data is here.</h1>
 
 
-
             <div className="overflow-x-auto">
               <table className="table table-zebra w-full">
                 <thead>
@@ -182,7 +157,7 @@ function App() {
                             <div>
                               {/* The button to open modal */}
                               <label
-                                onClick={() => displayData(postData?._id)}
+                                onClick={() => setSingledata(postData)}
                                 htmlFor="my-modal-3" className=" "><FaEdit /></label>
 
                               <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -190,8 +165,10 @@ function App() {
                               <div className="modal">
                                 <div className="modal-box relative">
 
+
                                   <form
-                                    onSubmit={() => handleUpdate(postData.id)}>
+                                    onSubmit={handleUpdate}>
+
                                     <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                                     <h3 className="text-lg font-bold">Congratulations!</h3>
                                     <input name='name' type="text"
@@ -210,10 +187,9 @@ function App() {
                             </div>
                           </div>
                         </td>
-                      </tr>)
+                      </tr>
+                    )
                   }
-
-
 
                 </tbody>
               </table>
